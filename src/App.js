@@ -1,23 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import React from 'react';
+
+import { Login } from './views/login/login';
+import JoinRoom from './views/join-room/joinRoom';
+import { useStore } from './context/context'
+import Lobby from './views/lobby/lobby';
 
 function App() {
+  const { state } = useStore()
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {!state.player.playerName && <Login />}
+      {state.player.playerName && !state.room.roomId && < JoinRoom />}
+      {state.room.roomId && <Lobby />}
     </div>
   );
 }

@@ -1,0 +1,35 @@
+.joinRoom-view{
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+
+  h3 {
+    margin-bottom: 16px;
+    font-weight: bolder;
+    text-transform: uppercase;
+  }
+
+  input{
+    font-size: 32px;
+    border: 0;
+    border-bottom: 1px solid white;
+    outline: none;
+    color: white;
+    background: transparent;
+    margin-bottom: 16px;
+  }
+
+  button{
+    font-size: 25px;
+    border-radius: 3px;
+    border: none;
+    padding: 12px 100px;
+    background-color: #60567A;
+    color: white;
+    margin-bottom: 64px;
+  }
+}
