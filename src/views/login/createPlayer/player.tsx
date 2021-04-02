@@ -1,31 +1,47 @@
-import React, { ChangeEvent } from 'react'
-import { useStore } from '../../../context/context';
-import { playerId } from "../../../socket/socket";
+import React, { ChangeEvent } from 'react';
+import { useHistory } from "react-router-dom";
+import { PlayerData, useStore, useStoreSchema } from '../../../context/context';
+import { serverConnected, serverOff } from '../../../socket/socketEvents';
 import './style.scss';
 
-
 const Player = () => {
-
-  const { state, dispatch } = useStore()
+  const { state, dispatch }: useStoreSchema = useStore()
+  const history = useHistory();
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const target: HTMLInputElement = e.target;
-    const value: string = target.value;
-    dispatch({ type: 'HANDLE_PLAYER_INPUT', payload: { playerInput: value } })
+    dispatch({ type: 'HANDLE_PLAYER_INPUT', payload: { playerInput: e.target.value } })
   }
 
-  const setPlayer = () => {
-    const player = { ...state.player };
-    player.playerName = state.playerInput;
-    player.conectionId = playerId;
-    dispatch({ type: 'SET_PLAYER', payload: { player } })
+  const setPlayer = async () => {
+    const player: PlayerData = { playerName: state.playerInput }
+    await dispatch({ type: 'SET_PLAYER', payload: { player } })
+    window.localStorage.setItem('sessionname', state.playerInput)
+    history.push('/join');
   }
+
+  React.useEffect(() => {
+    // if name already exist on session storage
+    if (window.localStorage.getItem('sessionname')) {
+      // set playerName and its id into state
+      const player: PlayerData | any = { playerName: window.localStorage.getItem('sessionname') }
+      dispatch({ type: 'SET_PLAYER', payload: { player } })
+      // then go to join path
+      history.push('/join');
+    }
+
+    serverConnected(dispatch)
+    serverOff(dispatch)
+  }, [history, dispatch])
+
 
   return (
-    <div className="login-player">
-      <h3 className="login-player_heading">Nombre de jugador</h3>
-      <input type="text" name="PlayerName" onChange={handleInput} value={state.playerInput} />
-      <button onClick={setPlayer}>Enter</button>
+    <div className="login-player">{state.clientConnected ?
+      <>
+        <h3 className="login-player_heading">Nombre de jugador</h3>
+        <input type="text" name="PlayerName" onChange={handleInput} value={state.playerInput} />
+        <button onClick={setPlayer}>Enter</button>
+      </>
+      : <h1>Conectando...</h1>}
     </div>
   )
 }

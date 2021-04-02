@@ -1,11 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { Dispatch, ReactNode } from 'react';
 
 const initialState: IState = {
+  clientConnected: false,
   playerInput: '',
   createRoomInput: '',
   roomIdInput: '',
   player: {
-    conectionId: '',
     playerName: ''
   },
   room: {
@@ -29,6 +29,8 @@ const reducer = (state: IState, { type, payload }: Action): IState => {
     case 'HANDLE_ROOMID_INPUT':
       return { ...state, ...payload };
     case 'JOIN_ROOM':
+      return { ...state, ...payload };
+    case 'CONNECTED_TO_SERVER':
       return { ...state, ...payload };
     default:
       return state;
@@ -62,6 +64,7 @@ interface Children {
 }
 
 export interface IState {
+  clientConnected: boolean;
   playerInput: string;
   createRoomInput: string;
   roomIdInput: string;
@@ -69,8 +72,7 @@ export interface IState {
   room: Room
 }
 
-interface PlayerData {
-  readonly conectionId: string,
+export interface PlayerData {
   playerName: string;
 }
 
@@ -84,4 +86,9 @@ interface Room {
 interface Action {
   type: string;
   payload: Object;
+}
+
+export interface useStoreSchema {
+  state: IState;
+  dispatch: Dispatch<any>;
 }
