@@ -2,14 +2,14 @@ import React from 'react'
 import './style.scss'
 
 import { useStore } from '../../context/context'
-import socket from "../../socket/socket";
+import { socket } from "../../socket/socket";
 
 const Lobby = () => {
 
   const { state, dispatch } = useStore()
 
   React.useEffect(() => {
-    socket.on('updateRoom', (response) => {
+    socket.on('updateRoom', (response: any) => {
       dispatch({ type: 'JOIN_ROOM', payload: { ...response } })
     })
     return () => {
@@ -26,7 +26,7 @@ const Lobby = () => {
         </div>
         <div className="sidebar_players">
           <h3>Players</h3>
-          {state.room.players.map((player, i) => <li key={i}>{player.name}</li>)}
+          {state.room.players.map((player: any, i: number) => <li key={i}>{player.name}</li>)}
         </div>
       </div>
     </div>

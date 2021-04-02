@@ -1,21 +1,24 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import { useStore } from '../../../context/context';
+import { playerId } from "../../../socket/socket";
 import './style.scss';
+
 
 const Player = () => {
 
   const { state, dispatch } = useStore()
 
-  const handleInput = (e) => {
-    const target = e.target;
-    const value = target.value;
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const target: HTMLInputElement = e.target;
+    const value: string = target.value;
     dispatch({ type: 'HANDLE_PLAYER_INPUT', payload: { playerInput: value } })
   }
 
   const setPlayer = () => {
     const player = { ...state.player };
-    player.playerName = state.playerInput
-    dispatch({ type: 'SET_PLAYER_NAME', payload: player })
+    player.playerName = state.playerInput;
+    player.conectionId = playerId;
+    dispatch({ type: 'SET_PLAYER', payload: { player } })
   }
 
   return (
