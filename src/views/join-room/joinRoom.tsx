@@ -1,44 +1,49 @@
-import React from 'react'
-import socket from "../../socket/socket";
+import React, { ChangeEvent } from 'react'
+import { socket } from "../../socket/socket";
 import { useStore } from '../../context/context';
 
 import './style.scss'
 
-const JoinRoom = () => {
+const JoinRoom = (): JSX.Element => {
 
   const { state, dispatch } = useStore()
 
-  const handleCreateRoom = (e) => {
+  const handleCreateRoom = (e: ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
     const value = target.value;
     dispatch({ type: 'HANDLE_CREATEROOM_INPUT', payload: { createRoomInput: value } })
   }
 
-  const handleJoinRoom = (e) => {
+  const handleJoinRoom = (e: ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
     const value = target.value;
     dispatch({ type: 'HANDLE_ROOMID_INPUT', payload: { roomIdInput: value } })
   }
 
   React.useEffect(() => {
+
     socket.on('roomCreated', (response) => {
-      dispatch({ type: 'JOIN_ROOM', payload: { ...response } })
+      dispatch({ type: 'JOIN_ROOM', payload: { room: response } })
     })
 
     socket.on('updateRoom', (response) => {
-      dispatch({ type: 'JOIN_ROOM', payload: { ...response } })
+      dispatch({ type: 'JOIN_ROOM', payload: { room: response } })
     })
+
+    socket.on('roomError', (response) => {
+      console.log(response);
+    })
+
     return () => {
       socket.off()
     }
   })
 
   const createRoom = () => socket.emit('createRoom', { name: state.createRoomInput, player: state.player.playerName });
-  //const createRoom = () => console.log(player);;
 
   const joinRoom = () => socket.emit('joinRoom', { roomId: state.roomIdInput, player: state.player.playerName })
 
-  console.log(state.room);
+
 
   return (
     <div className="joinRoom-view">
