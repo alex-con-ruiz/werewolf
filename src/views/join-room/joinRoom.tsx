@@ -1,29 +1,29 @@
 import React, { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useStore } from '../../context/context';
+import { useStore, useStoreSchema } from '../../context/context';
 import { socket } from "../../socket/socket";
-import { updatedRoom, roomError, retrieveSID } from '../../socket/socketEvents';
+import { retrieveSID, roomError, updatedRoom } from '../../socket/socketEvents';
 import './style.scss';
 
 
 const JoinRoom = (): JSX.Element => {
 
-  const { state, dispatch } = useStore();
+  const { state, dispatch }: useStoreSchema = useStore();
   const history = useHistory();
 
-  const handleCreateRoom = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCreateRoom = (e: ChangeEvent<HTMLInputElement>): void => {
     dispatch({ type: 'HANDLE_CREATEROOM_INPUT', payload: { createRoomInput: e.target.value } })
   }
 
-  const handleJoinRoom = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleJoinRoom = (e: ChangeEvent<HTMLInputElement>): void => {
     dispatch({ type: 'HANDLE_ROOMID_INPUT', payload: { roomIdInput: e.target.value } })
   }
 
-  const goTo = (roomId: string) => {
+  const goTo = (roomId: string): void => {
     history.push(`/lobby?room=${roomId}`);
   }
 
-  const goToError = () => {
+  const goToError = (): void => {
     history.push(`/error`);
   }
 
@@ -39,13 +39,14 @@ const JoinRoom = (): JSX.Element => {
     return () => {
       socket.off()
     }
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, dispatch, history])
 
   const createRoom = () => socket.emit('createRoom', { name: state.createRoomInput, player: state.player.playerName });
 
   const joinRoom = () => {
     if (window.localStorage.getItem('SID')) {
-      socket.emit('rejoinRoom', { roomId: state.roomIdInput, SID: window.localStorage.getItem('SID'), player: state.player.playerName})
+      socket.emit('rejoinRoom', { roomId: state.roomIdInput, SID: window.localStorage.getItem('SID'), player: state.player.playerName })
     } else {
       socket.emit('joinRoom', { roomId: state.roomIdInput, player: state.player.playerName })
     }

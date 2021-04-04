@@ -1,0 +1,28 @@
+.rolbar {
+  height: 100%;
+  width: 20%;
+  min-width: 250px;
+  border-left: 1px solid #76849c0c;
+  padding: 15px;
+  background-color: #343a44;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  img{
+    width: 80%;
+  }
+
+  .rol_description{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: 32px;
+
+    button{
+      margin-top: 30px;
+      padding: 15px;
+    }
+  }
+}

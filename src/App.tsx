@@ -7,10 +7,8 @@ const Login = lazy(() => import('./views/login/login'));
 const JoinRoom = lazy(() => import('./views/join-room/joinRoom'));
 const Lobby = lazy(() => import('./views/lobby/lobby'));
 
-function App() {
+function App(): JSX.Element {
 
-
-  
   return (
     <div className="App">
       <Router>
