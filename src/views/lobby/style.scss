@@ -4,7 +4,8 @@
   display: flex;
   position: relative;
   color: rgb(187, 187, 187);
-
+  display: flex;
+  justify-content: space-between;
   &::before {
     content: " ";
     display: block;
@@ -16,40 +17,9 @@
     opacity: 0.2;
     background-image: url("../../assets/maxresdefault3.jpg");
     background-repeat: no-repeat;
-    background-position: 65% 50%;
-    background-size: 50%;
+    background-position: 50% 50%;
+    background-size: 30%;
     z-index: 1;
   }
 
-  &_sidebar {
-    height: 100%;
-    width: 20%;
-    min-width: 250px;
-    border-right: 1px solid #76849c0c;
-    padding: 15px;
-    background-color: #343a44;
-    z-index: 2;
-
-    .sidebar_room-info {
-      padding-bottom: 16px;
-      border-bottom: 1px solid #76849c3a;
-    }
-
-    .sidebar_players {
-      padding-top: 15px;
-
-      li {
-        margin-top: 15px;
-        list-style: none;
-        padding: 5px;
-        border-radius: 3px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        &:hover {
-          background-color: #aabfe43a;
-        }
-      }
-    }
-  }
 }

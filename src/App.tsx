@@ -1,19 +1,25 @@
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.scss';
-import React from 'react';
 
-import { Login } from './views/login/login';
-import JoinRoom from './views/join-room/joinRoom';
-import { useStore } from './context/context'
-import Lobby from './views/lobby/lobby';
 
-function App() {
-  const { state } = useStore()
+const Login = lazy(() => import('./views/login/login'));
+const JoinRoom = lazy(() => import('./views/join-room/joinRoom'));
+const Lobby = lazy(() => import('./views/lobby/lobby'));
+
+function App(): JSX.Element {
 
   return (
     <div className="App">
-      {!state.player.playerName && <Login />}
-      {state.player.playerName && !state.room.roomId && < JoinRoom />}
-      {state.room.roomId && <Lobby />}
+      <Router>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Switch>
+            <Route exact path="/" component={Login} />
+            <Route exact path="/join" component={JoinRoom} />
+            <Route exact path="/lobby" component={Lobby} />
+          </Switch>
+        </Suspense>
+      </Router>
     </div>
   );
 }

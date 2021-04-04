@@ -1,17 +1,19 @@
-import React, { ReactNode } from 'react';
+import React, { Dispatch, ReactNode } from 'react';
 
 const initialState: IState = {
+  clientConnected: false,
   playerInput: '',
   createRoomInput: '',
   roomIdInput: '',
   player: {
-    conectionId: '',
     playerName: ''
   },
   room: {
     roomId: '',
     owner: '',
     roomName: '',
+    rol: '',
+    readyCheck: false,
     players: ''
   }
 }
@@ -19,6 +21,9 @@ const initialState: IState = {
 export const AppContext = React.createContext<IState | any>(initialState)
 
 const reducer = (state: IState, { type, payload }: Action): IState => {
+
+  let upDateState: IState;
+
   switch (type) {
     case 'HANDLE_PLAYER_INPUT':
       return { ...state, ...payload };
@@ -30,6 +35,16 @@ const reducer = (state: IState, { type, payload }: Action): IState => {
       return { ...state, ...payload };
     case 'JOIN_ROOM':
       return { ...state, ...payload };
+    case 'CONNECTED_TO_SERVER':
+      return { ...state, ...payload };
+    case 'READY_CHECK':
+      upDateState = { ...state };
+      upDateState.room.readyCheck = payload
+      return upDateState
+    case 'SET_ROL':
+      upDateState = { ...state };
+      upDateState.room.rol = payload;
+      return upDateState;
     default:
       return state;
   }
@@ -62,6 +77,7 @@ interface Children {
 }
 
 export interface IState {
+  clientConnected: boolean;
   playerInput: string;
   createRoomInput: string;
   roomIdInput: string;
@@ -69,8 +85,7 @@ export interface IState {
   room: Room
 }
 
-interface PlayerData {
-  readonly conectionId: string,
+export interface PlayerData {
   playerName: string;
 }
 
@@ -78,10 +93,27 @@ interface Room {
   readonly roomId: string;
   readonly owner: string;
   readonly roomName: string,
+  rol: any;
+  readyCheck: boolean;
   players: any;
 }
 
 interface Action {
   type: string;
-  payload: Object;
+  payload: any;
+}
+
+export interface useStoreSchema {
+  state: IState;
+  dispatch: Dispatch<any>
+}
+
+
+export interface RolSchema {
+  SID: string;
+  rolId: string;
+  rolName: string;
+  action: string | null;
+  actionDescription: string;
+  flavor: string;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import './login.scss';
 import Player from './createPlayer/player';
 
-export const Login = () => {
+const Login = (): JSX.Element => {
   return (
     <div className="login-view">
       <div className="login-view_logo" />
@@ -10,3 +10,5 @@ export const Login = () => {
     </div>
   )
 }
+
+export default Login
